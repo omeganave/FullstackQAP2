@@ -1,0 +1,12 @@
+{
+  "name": "fullstackqap2",
+  "version": "1.0.0",
+  "description": "Fullstack QAP2 - Evan Davies",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Evan Davies",
+  "license": "ISC"
+}
