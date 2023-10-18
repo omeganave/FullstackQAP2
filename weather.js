@@ -1,6 +1,7 @@
-import { find } from 'weather-js';
+// Not currently used. Had trouble getting require to work on the browser.
+const weather = require('weather-js');
 
-find({search: 'St. John\'s, NL', degreeType: 'C'}, function(err, result) {
+weather.find({search: 'St. John\'s, NL', degreeType: 'C'}, function(err, result) {
     if (err) {
         console.log(err);
     } else {

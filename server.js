@@ -1,7 +1,8 @@
 // User story 1 uses the logDirectory const to get the path to the logs directory, the getLogFileName function to get the log file name that should be written to, and the writeToLogFile function to write to the log file whenever an event is emitted.
 
-// User story 2
+// I planned on doing story 2 but ran out of time. I ran into a lot of problems with it too. The files that I had so far are still here to show where I was going with it.
 
+// All the requires.
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
@@ -69,10 +70,13 @@ function writeToLogFile(message) {
     })
 }
 
+// Creating the server
 const server = http.createServer((req, res) => {
+    // Getting the path
     const parsedUrl = url.parse(req.url, true);
     const pathName = parsedUrl.pathname;
 
+    // All the available routes
     const routeToFilename = {
         '/': 'index.html',
         '/about': 'about.html',
@@ -84,6 +88,7 @@ const server = http.createServer((req, res) => {
 
     const filename = routeToFilename[pathName];
 
+    // Was going to be used for user story 2. Now not used for anything, but doesn't cause anything to not work either.
     if (pathName === '/weather.js') {
         const filePath = path.join(__dirname, 'weather.js');
         fs.readFile(filePath, 'utf8', (err, data) => {
@@ -95,6 +100,7 @@ const server = http.createServer((req, res) => {
                 res.end(data);
             }
         });
+        // Requesting the appropriate html file. Throwing an error if the file does not exist.
     } else {
         if (filename) {
             const filePath = path.join(__dirname, 'views', filename);
@@ -124,48 +130,12 @@ const server = http.createServer((req, res) => {
             res.end('<h1>404 Not Found</h1>');
         }
     }
-    
-    
-    // if (filename) {
-    //     const filePath = path.join(__dirname, 'views', filename);
-    //     fs.access(filePath, fs.constants.F_OK, (err) => {
-    //         if(err) {
-    //             newEmitter.emit('notFound', req);
-    //             res.writeHead(404, {'Content-Type': 'text/html'});
-    //             res.end('<h1>404 Not Found</h1>');
-    //         } else {
-    //             // newEmitter.emit('request', req);
-    //             fs.readFile(filePath, 'utf8', (err, data) => {
-    //                 if(err) {
-    //                     newEmitter.emit('error', err);
-    //                     res.writeHead(500, {'Content-Type': 'text/html'});
-    //                     res.end('<h1>500 Internal Server Error</h1>');
-    //                 } else {
-    //                     newEmitter.emit('request', req);
-    //                     res.writeHead(200, {'Content-Type': 'text/html'});
-    //                     res.end(data);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // } else {
-    //     newEmitter.emit('notFound', req);
-    //     res.writeHead(404, {'Content-Type': 'text/html'});
-    //     res.end('<h1>404 Not Found</h1>');
-    // }
 });
 
+// Port number.
 const port = 3000;
 
+// Listening to the specified port
 server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 })
-
-// function logRequest(req, isError=false) {
-//     const date = new Date().toUTCString();
-//     const method = req.method;
-//     const url = req.url;
-//     const status = isError ? 404 : 200;
-//     console.log(`${date} ${method} ${url} ${status}`);
-// };
-
