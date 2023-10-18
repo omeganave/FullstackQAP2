@@ -10,6 +10,7 @@ const EventEmitter = require('events');
 class myEmitter extends EventEmitter {};
 const newEmitter = new myEmitter();
 
+
 // Gets the path to the logs directory.
 const logDirectory = path.join(__dirname, 'logs');
 
@@ -83,33 +84,75 @@ const server = http.createServer((req, res) => {
 
     const filename = routeToFilename[pathName];
 
-    if (filename) {
-        const filePath = path.join(__dirname, 'views', filename);
-        fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (pathName === '/weather.js') {
+        const filePath = path.join(__dirname, 'weather.js');
+        fs.readFile(filePath, 'utf8', (err, data) => {
             if(err) {
-                newEmitter.emit('notFound', req);
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                res.end('<h1>404 Not Found</h1>');
+                res.writeHead(404, {'Content-Type': 'text/plain'});
+                res.end('404 Not Found');
             } else {
-                // newEmitter.emit('request', req);
-                fs.readFile(filePath, 'utf8', (err, data) => {
-                    if(err) {
-                        newEmitter.emit('error', err);
-                        res.writeHead(500, {'Content-Type': 'text/html'});
-                        res.end('<h1>500 Internal Server Error</h1>');
-                    } else {
-                        newEmitter.emit('request', req);
-                        res.writeHead(200, {'Content-Type': 'text/html'});
-                        res.end(data);
-                    }
-                });
+                res.writeHead(200, {'Content-Type': 'application/javascript'});
+                res.end(data);
             }
         });
     } else {
-        newEmitter.emit('notFound', req);
-        res.writeHead(404, {'Content-Type': 'text/html'});
-        res.end('<h1>404 Not Found</h1>');
+        if (filename) {
+            const filePath = path.join(__dirname, 'views', filename);
+            fs.access(filePath, fs.constants.F_OK, (err) => {
+                if(err) {
+                    newEmitter.emit('notFound', req);
+                    res.writeHead(404, {'Content-Type': 'text/html'});
+                    res.end('<h1>404 Not Found</h1>');
+                } else {
+                    // newEmitter.emit('request', req);
+                    fs.readFile(filePath, 'utf8', (err, data) => {
+                        if(err) {
+                            newEmitter.emit('error', err);
+                            res.writeHead(500, {'Content-Type': 'text/html'});
+                            res.end('<h1>500 Internal Server Error</h1>');
+                        } else {
+                            newEmitter.emit('request', req);
+                            res.writeHead(200, {'Content-Type': 'text/html'});
+                            res.end(data);
+                        }
+                    });
+                }
+            });
+        } else {
+            newEmitter.emit('notFound', req);
+            res.writeHead(404, {'Content-Type': 'text/html'});
+            res.end('<h1>404 Not Found</h1>');
+        }
     }
+    
+    
+    // if (filename) {
+    //     const filePath = path.join(__dirname, 'views', filename);
+    //     fs.access(filePath, fs.constants.F_OK, (err) => {
+    //         if(err) {
+    //             newEmitter.emit('notFound', req);
+    //             res.writeHead(404, {'Content-Type': 'text/html'});
+    //             res.end('<h1>404 Not Found</h1>');
+    //         } else {
+    //             // newEmitter.emit('request', req);
+    //             fs.readFile(filePath, 'utf8', (err, data) => {
+    //                 if(err) {
+    //                     newEmitter.emit('error', err);
+    //                     res.writeHead(500, {'Content-Type': 'text/html'});
+    //                     res.end('<h1>500 Internal Server Error</h1>');
+    //                 } else {
+    //                     newEmitter.emit('request', req);
+    //                     res.writeHead(200, {'Content-Type': 'text/html'});
+    //                     res.end(data);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // } else {
+    //     newEmitter.emit('notFound', req);
+    //     res.writeHead(404, {'Content-Type': 'text/html'});
+    //     res.end('<h1>404 Not Found</h1>');
+    // }
 });
 
 const port = 3000;
