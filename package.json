@@ -8,5 +8,9 @@
     "start": "node server.js"
   },
   "author": "Evan Davies",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "weather-js": "^2.0.0"
+  }
 }
